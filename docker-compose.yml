@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  functions:
+    container_name: functions
+    build:
+      context: ./
+      dockerfile: ./.docker/functions/Dockerfile
+    ports:
+      - '80:80'
