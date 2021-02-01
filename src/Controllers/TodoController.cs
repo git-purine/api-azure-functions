@@ -3,24 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace FuncCs.Controllers
 {
-  public class HelloworldController
+  using Models;
+
+  public class TodoController
   {
-    public HelloworldController()
+    public TodoController(FuncDbContext funcDbContext)
     {
+      _funcDbContext = funcDbContext;
     }
 
-    [FunctionName("HelloworldController_Get")]
+    private readonly FuncDbContext _funcDbContext;
+
+    [FunctionName("TodoController_Get")]
     public IActionResult Get(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "hello_world")] HttpRequest req,
         ILogger logger
     )
     {
-      logger.LogInformation("!!HelloworldController_Get!!");
+      logger.LogInformation("!!TodoController_Get!!");
 
-      return new OkResult();
+      var todos = _funcDbContext.Todos.ToList();
+
+      return new OkObjectResult(todos);
     }
   }
 }

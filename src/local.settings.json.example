@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "Environment": "Local",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "ConnectionStrings": {
+    "Database": "Server=(localdb)\\mssqllocaldb;Database=SampleDb;Integrated Security=True",
+    "Database_win": "Server=(localdb)\\mssqllocaldb;Database=SampleDb;Integrated Security=True",
+    "Database_mac": "Server=database,1433;Initial Catalog=SampleDb;User ID=sample_db_user;Password=QdApg_VEyCk6;"
+  }
+}

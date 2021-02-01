@@ -7,4 +7,37 @@ services:
       context: ./
       dockerfile: ./.docker/functions/Dockerfile
     ports:
-      - '80:80'
+      - 80:80
+    env_file:
+      - .env
+    environment:
+      AZURE_FUNCTIONS_ENVIRONMENT: ${AZURE_FUNCTIONS_ENVIRONMENT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ConnectionStrings__Database: ${ConnectionStrings__Database}
+
+  database:
+    container_name: database
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=${MSSQL_PID}
+      - SA_PASSWORD=${SA_PASSWORD}
+    volumes:
+      - ./.docker/database/sql:/docker-entrypoint-initdb.d
+      - ./.docker/database/docker-entrypoint.sh:/docker-entrypoint.sh
+      - mssql_data:/var/opt/mssql
+    command: >
+      sh -c 'chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh & /opt/mssql/bin/sqlservr;'
+
+  workspace:
+    container_name: ws
+    image: mcr.microsoft.com/dotnet/sdk:3.1
+    volumes:
+      - .:/workspace
+    working_dir: /workspace/src
+    tty: true
+
+volumes:
+  mssql_data:
